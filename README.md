@@ -1,8 +1,8 @@
 # logjammer
 
-Simple test tool for send high volume of documents to a Ditto collection. It
-was originally built to support testing of BLE meshes on Linux ARM boards -
-e.g., Raspberry Pi and Jetson computers.
+Simple test tool for sending high volume of documents at a high rate
+to a Ditto collection. This was originally developed to support testing 
+of BLE meshes on Linux ARM boards - e.g., Raspberry Pi and Jetson computers.
 
 ## Setup
 

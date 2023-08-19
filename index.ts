@@ -4,21 +4,26 @@ require('dotenv').config()
 let ditto
 let collection
 let subscription
-let interval = 100 // 1 second
+let interval = 100 // 100ms or 10Hz
 let counter = 0
 
+// Random number generator for fake data
 function randomIntFromInterval(min, max) { // min and max included 
   return Math.floor(Math.random() * (max - min + 1) + min)
 }
 
+// Sleeper
 function sleep(ms) {
   return new Promise((resolve) => {
     setTimeout(resolve, ms);
   });
 }
 
+// This is the Ditto doc generator
 function doOnInterval() {
   counter += 1
+
+  // This is just enough fake data
   let payload = {
     "timestamp": Date.now(),
     "nodeId": "alpha",
@@ -26,6 +31,9 @@ function doOnInterval() {
     "magX":randomIntFromInterval(-99,99),
     "magY":randomIntFromInterval(-99,99),
     "magZ":randomIntFromInterval(-99,99),
+    "temp":randomIntFromInterval(-99,99),
+    "pressure":randomIntFromInterval(-99,99),
+    "humidity":randomIntFromInterval(-99,99),
     "synced": false
   }
   collection.upsert(payload)
@@ -36,10 +44,13 @@ function doOnInterval() {
 async function main () {
   await init()
   console.log("Starting logjammer...")
+
+  // We're testing BLE here
   const config = new TransportConfig()
   config.peerToPeer.bluetoothLE.isEnabled = true
   config.peerToPeer.lan.isEnabled = false
   config.peerToPeer.awdl.isEnabled = false
+  
   // Create a Ditto' context:
   ditto = new Ditto({ 
     type: 'onlinePlayground', 
@@ -60,6 +71,8 @@ async function main () {
   ditto.setTransportConfig(config)
   
   ditto.startSync()
+
+  // Console out the peers found
   const presenceObserver = ditto.presence.observe((graph) => {
     if (graph.remotePeers.length != 0) {
       graph.remotePeers.forEach((peer) => {
@@ -68,11 +81,15 @@ async function main () {
     }
   })
 
+  // Basic Ditto collection and subscription
   collection = ditto.store.collection("raw_data")
-  subscription = collection.find("isDeleted == false").subscribe()
-  await sleep(5000)
-  const doingEverySecond = setInterval(doOnInterval, interval)
+  subscription = collection.find("synced == false").subscribe()
 
+  // Wait five seconds at start to try and find BLE peers before writing docs
+  await sleep(5000)
+
+  // Do the thing
+  const doingEverySecond = setInterval(doOnInterval, interval)
 }
 
 main()
