@@ -1,0 +1,4 @@
+ditto
+node_modules
+.env
+index.js

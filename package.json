@@ -1,0 +1,7 @@
+{
+  "dependencies": {
+    "@dittolive/ditto": "^4.3.1",
+    "@types/node": "^20.5.1",
+    "dotenv": "^16.3.1"
+  }
+}
