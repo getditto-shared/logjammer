@@ -34,3 +34,7 @@ Testing the receive end was done with https://github.com/getditto-shared/ditto-t
 
 A 5-second "sleep" is used before upserts begin, to allow for the remote peers to connect
 via BLE.  But, this also works if local upserts run, long before the receiver connects.
+
+## License
+
+MIT - See `LICENSE` file for details.
