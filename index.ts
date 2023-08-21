@@ -34,7 +34,7 @@ function doOnInterval() {
     "temp":randomIntFromInterval(-99,99),
     "pressure":randomIntFromInterval(-99,99),
     "humidity":randomIntFromInterval(-99,99),
-    "synced": false
+    "state": "published"
   }
   collection.upsert(payload)
 
