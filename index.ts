@@ -4,7 +4,7 @@ require('dotenv').config()
 let ditto
 let collection
 let subscription
-let interval = 100 // 100ms or 10Hz
+let interval = 1000 // 1000ms or 1Hz
 let counter = 0
 
 // Random number generator for fake data
