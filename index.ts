@@ -150,7 +150,7 @@ async function main() {
   await sleep(5000)
 
   // Do the thing
-  //const doingEverySecond = setInterval(doOnInterval, interval)
+  const doingEverySecond = setInterval(doOnInterval, interval)
 }
 
 main()
