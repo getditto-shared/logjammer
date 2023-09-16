@@ -1,5 +1,6 @@
-import { init, Collection, Ditto, Identity, Subscription, TransportConfig } from '@dittolive/ditto'
+import { init, Authenticator, Collection, Ditto, Identity, Subscription, TransportConfig } from '@dittolive/ditto'
 import { v4 as uuidv4 } from 'uuid';
+import { Coordinates, Rectangle, calculateRectangularMovement } from "./flight_path"
 
 let nconf = require("nconf")
 
@@ -13,29 +14,44 @@ let counter = 0
 // Starting map point
 let lat = -105.11
 let long = 35.11
+const startTime: number = Date.now();
 
 nconf.argv()
   .env()
   .file({ file: 'config.json' })
 
 // Random number generator for fake data
-function randomIntFromInterval(min, max) { // min and max included 
+function randomIntFromInterval(min: number, max: number) { // min and max included 
   return Math.floor(Math.random() * (max - min + 1) + min)
 }
 
 // Sleeper
-function sleep(ms) {
+function sleep(ms: number) {
   return new Promise((resolve) => {
     setTimeout(resolve, ms);
   });
 }
 
+const rectangle: Rectangle = {
+  topLeftLat: 40.0,
+  topLeftLon: -74.0,
+  topRightLat: 40.0,
+  topRightLon: -73.5,
+  bottomLeftLat: 39.5,
+  bottomLeftLon: -74.0,
+  bottomRightLat: 39.5,
+  bottomRightLon: -73.5,
+};
+
 // This is the Ditto doc generator
 function doOnInterval() {
-  lat = lat + (counter * .10)
-  long = long - (counter * .10)
 
   counter += 1
+
+  const speed: number = 0.01; // Degrees per millisecond
+
+  const currentTime: number = startTime + Date.now(); // Current time after 1 hour (milliseconds)
+  const currentPosition: Coordinates = calculateRectangularMovement(startTime, currentTime, speed, rectangle);
 
   // This is just enough fake data
   let payload = {
@@ -43,7 +59,7 @@ function doOnInterval() {
     "type": "WKT",
     "title": "logjammer",
     "description": "test data chucker",
-    "data": `POINT(${lat},${long})`,
+    "data": `POINT(${currentPosition.latitude},${currentPosition.longitude})`,
     "timestamp": Date.now(),
     "nodeId": "alpha",
     "quartetId": "quartet-1",
@@ -96,12 +112,12 @@ async function main() {
   //   sharedKey: process.env.SHARED_KEY,
   // }
   const authHandler = {
-    authenticationRequired: async function(authenticator) {
+    authenticationRequired: async function(authenticator: Authenticator) {
       await authenticator.loginWithToken("full_access", "dummy-provider")
       console.log(`Login requested`);
 
     },
-    authenticationExpiringSoon: function(authenticator, secondsRemaining) {
+    authenticationExpiringSoon: function(authenticator: Authenticator, secondsRemaining: number) {
       console.log(`Auth token expiring in ${secondsRemaining} seconds`)
     }
   }
