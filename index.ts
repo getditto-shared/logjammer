@@ -6,6 +6,7 @@ let collection
 let subscription
 let interval = 1000 // 1000ms or 1Hz
 let counter = 0
+let presenceObserver
 
 // Random number generator for fake data
 function randomIntFromInterval(min, max) { // min and max included 
@@ -28,12 +29,12 @@ function doOnInterval() {
     "timestamp": Date.now(),
     "nodeId": "alpha",
     "quartetId": "quartet-1",
-    "magX":randomIntFromInterval(-99,99),
-    "magY":randomIntFromInterval(-99,99),
-    "magZ":randomIntFromInterval(-99,99),
-    "temp":randomIntFromInterval(-99,99),
-    "pressure":randomIntFromInterval(-99,99),
-    "humidity":randomIntFromInterval(-99,99),
+    "magX": randomIntFromInterval(-99, 99),
+    "magY": randomIntFromInterval(-99, 99),
+    "magZ": randomIntFromInterval(-99, 99),
+    "temp": randomIntFromInterval(-99, 99),
+    "pressure": randomIntFromInterval(-99, 99),
+    "humidity": randomIntFromInterval(-99, 99),
     "state": "published"
   }
   collection.upsert(payload)
@@ -41,7 +42,7 @@ function doOnInterval() {
   console.log(`Upserting to ditto: [${counter}]`, payload)
 }
 
-async function main () {
+async function main() {
   await init()
   console.log("Starting logjammer...")
 
@@ -50,30 +51,30 @@ async function main () {
   config.peerToPeer.bluetoothLE.isEnabled = true
   config.peerToPeer.lan.isEnabled = false
   config.peerToPeer.awdl.isEnabled = false
-  
+
   // Create a Ditto' context:
-  ditto = new Ditto({ 
-    type: 'onlinePlayground', 
-    appID: process.env.APP_ID, 
+  ditto = new Ditto({
+    type: 'onlinePlayground',
+    appID: process.env.APP_ID,
     token: process.env.APP_TOKEN,
     enableDittoCloudSync: false,
   })
   const transportConditionsObserver = ditto.observeTransportConditions((condition, source) => {
-     if (condition === 'BLEDisabled') {
-       console.log('BLE disabled')
-     } else if (condition === 'NoBLECentralPermission') {
-       console.log('Permission missing for BLE')
-     } else if (condition === 'NoBLEPeripheralPermission') {
-       console.log('Permissions missing for BLE')
-     }
+    if (condition === 'BLEDisabled') {
+      console.log('BLE disabled')
+    } else if (condition === 'NoBLECentralPermission') {
+      console.log('Permission missing for BLE')
+    } else if (condition === 'NoBLEPeripheralPermission') {
+      console.log('Permissions missing for BLE')
+    }
   })
 
   ditto.setTransportConfig(config)
-  
+
   ditto.startSync()
 
   // Console out the peers found
-  const presenceObserver = ditto.presence.observe((graph) => {
+  presenceObserver = ditto.presence.observe((graph) => {
     if (graph.remotePeers.length != 0) {
       graph.remotePeers.forEach((peer) => {
         console.log("peer connection: ", peer.deviceName, peer.connections[0].connectionType)
