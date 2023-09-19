@@ -1,20 +1,20 @@
-import { init, Ditto, Identity, TransportConfig } from '@dittolive/ditto'
+import { init, Collection, Ditto, Identity, Presence, Subscription, TransportConfig } from '@dittolive/ditto'
 require('dotenv').config()
 
-let ditto
-let collection
-let subscription
+let ditto: Ditto
+let collection: Collection
+let subscription: Subscription
 let interval = 1000 // 1000ms or 1Hz
 let counter = 0
 let presenceObserver
 
 // Random number generator for fake data
-function randomIntFromInterval(min, max) { // min and max included 
+function randomIntFromInterval(min: number, max: number) { // min and max included 
   return Math.floor(Math.random() * (max - min + 1) + min)
 }
 
 // Sleeper
-function sleep(ms) {
+function sleep(ms: number) {
   return new Promise((resolve) => {
     setTimeout(resolve, ms);
   });
@@ -55,8 +55,8 @@ async function main() {
   // Create a Ditto' context:
   ditto = new Ditto({
     type: 'onlinePlayground',
-    appID: process.env.APP_ID,
-    token: process.env.APP_TOKEN,
+    appID: process.env.APP_ID || '',
+    token: process.env.APP_TOKEN || '',
     enableDittoCloudSync: false,
   })
   const transportConditionsObserver = ditto.observeTransportConditions((condition, source) => {
