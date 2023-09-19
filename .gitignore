@@ -2,3 +2,5 @@ ditto
 node_modules
 .env
 index.js
+config.json
+flight_path.js
