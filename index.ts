@@ -8,7 +8,7 @@ let ditto: Ditto
 let collection: Collection
 let transportConfig: TransportConfig
 let identity: Identity
-let interval = 1000 // 1000ms or 1Hz
+let interval = 5000 // 1000ms or 1Hz
 let counter = 0
 let presenceObserver
 
@@ -54,13 +54,15 @@ function doOnInterval() {
   const currentTime: number = startTime + Date.now(); // Current time after 1 hour (milliseconds)
   const currentPosition: Coordinates = calculateRectangularMovement(startTime, currentTime, speed, rectangle);
 
+  let siteID = `${ditto.siteID}`
+  console.log(`SITE ID: ${siteID}`)
   // This is just enough fake data
   let payload = {
     "_id": uuidv4(),
     "type": "WKT",
     "title": "logjammer",
-    "description": "test data chucker",
-    "data": `POINT(${currentPosition.latitude},${currentPosition.longitude})`,
+    "description": "netmodx data chucker",
+    "data": `POINT(${currentPosition.latitude} ${currentPosition.longitude})`,
     "timestamp": Date.now(),
     "nodeId": "alpha",
     "quartetId": "quartet-1",
@@ -70,7 +72,10 @@ function doOnInterval() {
     "temp": randomIntFromInterval(-99, 99),
     "pressure": randomIntFromInterval(-99, 99),
     "humidity": randomIntFromInterval(-99, 99),
-    "state": "published"
+    "state": "published",
+    "isRemoved": false,
+    "siteId": siteID,
+    "timeMillis": Date.now() + 0.001
   }
   collection.upsert(payload)
 
@@ -171,7 +176,7 @@ async function main() {
   })
 
   // Basic Ditto collection and subscription
-  collection = ditto.store.collection("TAK_interop")
+  collection = ditto.store.collection("TAK_Interop")
 
   // Wait five seconds at start to try and find BLE peers before writing docs
   await sleep(5000)
