@@ -33,15 +33,20 @@ function sleep(ms: number) {
   });
 }
 
+//
+//-74.749558,40.118855,0.0 
+// -74.749558,39.938513,0.0 
+// -74.338257,39.938513,0.0 
+// -74.338257,40.118855,0.0
 const rectangle: Rectangle = {
-  topLeftLat: 40.0,
-  topLeftLon: -74.0,
-  topRightLat: 40.0,
-  topRightLon: -73.5,
-  bottomLeftLat: 39.5,
-  bottomLeftLon: -74.0,
-  bottomRightLat: 39.5,
-  bottomRightLon: -73.5,
+  topLeftLat: -74.749558,
+  topLeftLon: 40.118855,
+  topRightLat: -74.749558,
+  topRightLon: 39.938513,
+  bottomLeftLat: -74.338257,
+  bottomLeftLon: 39.938513,
+  bottomRightLat: -74.338257,
+  bottomRightLon: 40.118855,
 };
 
 // This is the Ditto doc generator
