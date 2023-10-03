@@ -8,13 +8,10 @@ let ditto: Ditto
 let collection: Collection
 let transportConfig: TransportConfig
 let identity: Identity
-let interval = 5000 // 1000ms or 1Hz
+let interval = 2000 // 1000ms or 1Hz
 let counter = 0
 let presenceObserver
 
-// Starting map point
-let lat = -105.11
-let long = 35.11
 const startTime: number = Date.now();
 
 nconf.argv()
@@ -33,41 +30,40 @@ function sleep(ms: number) {
   });
 }
 
-//
-//-74.749558,40.118855,0.0 
-// -74.749558,39.938513,0.0 
-// -74.338257,39.938513,0.0 
-// -74.338257,40.118855,0.0
 const rectangle: Rectangle = {
-  topLeftLat: -74.749558,
-  topLeftLon: 40.118855,
-  topRightLat: -74.749558,
-  topRightLon: 39.938513,
-  bottomLeftLat: -74.338257,
-  bottomLeftLon: 39.938513,
-  bottomRightLat: -74.338257,
-  bottomRightLon: 40.118855,
+  topLeftLat: 33.9387955,
+  topLeftLon: -84.7549925,
+  topRightLat: 33.9387955,
+  topRightLon: -83.6990433,
+  bottomLeftLat: 33.5090974,
+  bottomLeftLon: -84.7549925,
+  bottomRightLat: 33.5090974,
+  bottomRightLon: -83.6990433
 };
+
+const speed: number = 0.002; // Degrees per millisecond
+
+const dID = uuidv4();
 
 // This is the Ditto doc generator
 function doOnInterval() {
 
   counter += 1
 
-  const speed: number = 0.01; // Degrees per millisecond
-
-  const currentTime: number = startTime + Date.now(); // Current time after 1 hour (milliseconds)
+  const currentTime: number = startTime + (interval * speed * counter); // Current time after 1 hour (milliseconds)
   const currentPosition: Coordinates = calculateRectangularMovement(startTime, currentTime, speed, rectangle);
 
   let siteID = `${ditto.siteID}`
   console.log(`SITE ID: ${siteID}`)
   // This is just enough fake data
   let payload = {
-    "_id": uuidv4(),
+    "_id": dID,
     "type": "WKT",
     "title": "logjammer",
+    "altitude": 300,
     "description": "netmodx data chucker",
-    "data": `POINT(${currentPosition.latitude} ${currentPosition.longitude})`,
+    "data": `POINT(${currentPosition.longitude} ${currentPosition.latitude})`,
+    "heading": currentPosition.heading,
     "timestamp": Date.now(),
     "nodeId": "alpha",
     "quartetId": "quartet-1",

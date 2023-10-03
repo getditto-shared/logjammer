@@ -12,6 +12,7 @@ export interface Rectangle {
 export interface Coordinates {
   latitude: number;
   longitude: number;
+  heading: number;
 }
 
 export function calculateRectangularMovement(
@@ -20,39 +21,46 @@ export function calculateRectangularMovement(
   speed: number,
   rectangle: Rectangle
 ): Coordinates {
-  const topLeft: Coordinates = { latitude: rectangle.topLeftLat, longitude: rectangle.topLeftLon };
-  const topRight: Coordinates = { latitude: rectangle.topRightLat, longitude: rectangle.topRightLon };
-  const bottomLeft: Coordinates = { latitude: rectangle.bottomLeftLat, longitude: rectangle.bottomLeftLon };
-  const bottomRight: Coordinates = { latitude: rectangle.bottomRightLat, longitude: rectangle.bottomRightLon };
+  const topLeft: Coordinates = { latitude: rectangle.topLeftLat, longitude: rectangle.topLeftLon, heading: 0 };
+  const topRight: Coordinates = { latitude: rectangle.topRightLat, longitude: rectangle.topRightLon, heading: 0 };
+  const bottomLeft: Coordinates = { latitude: rectangle.bottomLeftLat, longitude: rectangle.bottomLeftLon, heading: 0 };
+  // const bottomRight: Coordinates = { latitude: rectangle.bottomRightLat, longitude: rectangle.bottomRightLon };
 
   const width: number = Math.abs(topLeft.longitude - topRight.longitude);
   const height: number = Math.abs(topLeft.latitude - bottomLeft.latitude);
 
+  const perimeter: number = 2 * (width + height);
+
   const elapsedTime: number = currentTime - startTime;
   const distance: number = speed * elapsedTime;
 
-  const xPosition: number = distance % width;
-  const yPosition: number = distance % height;
+  const distanceAlongPerimeter: number = distance % perimeter;
 
-  const currentLatitude: number = topLeft.latitude - yPosition;
-  const currentLongitude: number = topLeft.longitude + xPosition;
+  let currentLatitude: number;
+  let currentLongitude: number;
+  let currentHeading: number;
 
-  return { latitude: currentLatitude, longitude: currentLongitude };
+  if (distanceAlongPerimeter <= width) {
+    // Moving along the top edge
+    currentHeading = 90;
+    currentLatitude = topLeft.latitude;
+    currentLongitude = topLeft.longitude + distanceAlongPerimeter;
+  } else if (distanceAlongPerimeter <= width + height) {
+    // Moving along the right edge
+    currentHeading = 180;
+    currentLatitude = topLeft.latitude - (distanceAlongPerimeter - width);
+    currentLongitude = topRight.longitude;
+  } else if (distanceAlongPerimeter <= 2 * width + height) {
+    // Moving along the bottom edge
+    currentHeading = 270;
+    currentLatitude = bottomLeft.latitude;
+    currentLongitude = topRight.longitude - (distanceAlongPerimeter - width - height);
+  } else {
+    // Moving along the left edge
+    currentHeading = 0;
+    currentLatitude = bottomLeft.latitude + (distanceAlongPerimeter - 2 * width - height);
+    currentLongitude = topLeft.longitude;
+  }
+
+  return { latitude: currentLatitude, longitude: currentLongitude, heading: currentHeading };
 }
-
-function delay(ms: number) {
-  return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-// Example usage:
-const rectangle: Rectangle = {
-  topLeftLat: 40.0,
-  topLeftLon: -74.0,
-  topRightLat: 40.0,
-  topRightLon: -73.5,
-  bottomLeftLat: 39.5,
-  bottomLeftLon: -74.0,
-  bottomRightLat: 39.5,
-  bottomRightLon: -73.5,
-};
-
