@@ -58,11 +58,12 @@ function doOnInterval() {
   // This is just enough fake data
   let payload = {
     "_id": dID,
-    "type": "WKT",
+    "type": "a-f-G",
     "title": "logjammer",
     "altitude": 300,
-    "description": "netmodx data chucker",
-    "data": `POINT(${currentPosition.longitude} ${currentPosition.latitude})`,
+    "description": "ausa test marker",
+    "lon": currentPosition.longitude,
+    "lat": currentPosition.latitude,
     "heading": currentPosition.heading,
     "timestamp": Date.now(),
     "nodeId": "alpha",
@@ -177,7 +178,7 @@ async function main() {
   })
 
   // Basic Ditto collection and subscription
-  collection = ditto.store.collection("TAK_Interop")
+  collection = ditto.store.collection("TAK_Markers")
 
   // Wait five seconds at start to try and find BLE peers before writing docs
   await sleep(5000)
