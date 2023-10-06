@@ -31,17 +31,17 @@ function sleep(ms: number) {
 }
 
 const rectangle: Rectangle = {
-  topLeftLat: 33.9387955,
-  topLeftLon: -84.7549925,
-  topRightLat: 33.9387955,
-  topRightLon: -83.6990433,
-  bottomLeftLat: 33.5090974,
-  bottomLeftLon: -84.7549925,
-  bottomRightLat: 33.5090974,
-  bottomRightLon: -83.6990433
+  topLeftLat: 38.9087031,
+  topLeftLon: -77.0262060,
+  topRightLat: 38.9087031,
+  topRightLon: -77.0189893,
+  bottomLeftLat: 38.9011023,
+  bottomLeftLon: -77.0262060,
+  bottomRightLat: 38.9011023,
+  bottomRightLon: -77.0189893
 };
 
-const speed: number = 0.002; // Degrees per millisecond
+const speed: number = 0.0005; // Degrees per millisecond
 
 const dID = uuidv4();
 
