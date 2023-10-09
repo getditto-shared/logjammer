@@ -58,7 +58,7 @@ function doOnInterval() {
   // This is just enough fake data
   let payload = {
     "_id": dID,
-    "type": "a-f-G",
+    "type": "a-h-A-M-A",
     "title": "logjammer",
     "altitude": 300,
     "description": "ausa test marker",
