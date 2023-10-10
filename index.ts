@@ -2,7 +2,11 @@ import { init, Authenticator, Collection, Ditto, Identity, Subscription, Transpo
 import { v4 as uuidv4 } from 'uuid';
 import { Coordinates, Rectangle, calculateRectangularMovement } from "./flight_path"
 
+let sense = require("sense-hat-led");
+
 let nconf = require("nconf")
+
+sense.setRotation(180);
 
 let ditto: Ditto
 let collection: Collection
@@ -18,6 +22,20 @@ nconf.argv()
   .env()
   .file({ file: 'config.json' })
 
+let blue = [0, 0, 255]
+let black = [0, 0, 0]
+let X = blue;
+let O = black;
+let dittoMark = [
+  O, O, O, O, O, O, O, O,
+  X, X, O, X, X, O, O, O,
+  O, X, X, O, X, X, O, O,
+  O, O, X, X, O, X, X, O,
+  O, O, O, X, X, O, X, X,
+  O, O, X, X, O, X, X, O,
+  O, X, X, O, X, X, O, O,
+  X, X, O, X, X, O, O, O
+];
 // Random number generator for fake data
 function randomIntFromInterval(min: number, max: number) { // min and max included 
   return Math.floor(Math.random() * (max - min + 1) + min)
@@ -90,6 +108,10 @@ const asBoolean = (value: any) => [true, 'true', 'True', 'TRUE', '1', 1].include
 async function main() {
   await init()
   console.log("Starting logjammer...")
+
+  sense.clear();
+  await sleep(1000);
+  sense.setPixels(dittoMark);
 
   const config: Record<string, any> = {
     APP_ID: getConfig('ditto:app-id', ''),
