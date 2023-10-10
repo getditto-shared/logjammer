@@ -36,6 +36,26 @@ let dittoMark = [
   O, X, X, O, X, X, O, O,
   X, X, O, X, X, O, O, O
 ];
+
+process.once('SIGINT', async () => {
+  try {
+    sense.clear()
+    await sleep(500)
+  } finally {
+    console.log('SIGINT received...')
+    process.exit(0)
+  }
+  process.once('SIGINT', async () => {
+    try {
+      sense.clear()
+      await sleep(500)
+    } finally {
+      console.log('SIGINT received...')
+      process.exit(0)
+    }
+  });
+});
+
 // Random number generator for fake data
 function randomIntFromInterval(min: number, max: number) { // min and max included 
   return Math.floor(Math.random() * (max - min + 1) + min)
