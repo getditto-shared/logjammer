@@ -2,6 +2,7 @@ import { init, Authenticator, Collection, Ditto, Identity, Subscription, Transpo
 import { v4 as uuidv4 } from 'uuid';
 import { Coordinates, Rectangle, calculateRectangularMovement } from "./flight_path"
 
+
 let sense = require("sense-hat-led");
 
 let nconf = require("nconf")
@@ -45,15 +46,6 @@ process.once('SIGINT', async () => {
     console.log('SIGINT received...')
     process.exit(0)
   }
-  process.once('SIGINT', async () => {
-    try {
-      sense.clear()
-      await sleep(500)
-    } finally {
-      console.log('SIGINT received...')
-      process.exit(0)
-    }
-  });
 });
 
 // Random number generator for fake data
