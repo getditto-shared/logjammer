@@ -127,33 +127,33 @@ async function main() {
   await init()
   console.log("Starting logjammer...")
 
-let gpsClient = new Gpsd({
-  port: 2947,
-  hostname: 'localhost',
-  parse: true
-})
-
-gpsClient.on('connected', () => {
-  gpsClient.watch({
-    class: 'WATCH',
-    json: true,
-    scaled: true
+  let gpsClient = new Gpsd({
+    port: 2947,
+    hostname: 'localhost',
+    parse: true
   })
-})
 
-gpsClient.on('error', (err: Error) => {
-  console.log(`Gpsd error: ${err.message}`)
-})
+  gpsClient.on('connected', () => {
+    gpsClient.watch({
+      class: 'WATCH',
+      json: true,
+      scaled: true
+    })
+  })
+
+  gpsClient.on('error', (err: Error) => {
+    console.log(`Gpsd error: ${err.message}`)
+  })
 
 
-gpsClient.on('TPV', (data: any) => {
-  globalThis.gpsData = data
-})
+  gpsClient.on('TPV', (data: any) => {
+    globalThis.gpsData = data
+  })
 
-gpsClient.connect();
+  gpsClient.connect();
 
   while (globalThis.gpsData == undefined) {
-       await sleep(1000);
+    await sleep(1000);
   }
   // sense.clear();
   // await sleep(1000);
