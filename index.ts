@@ -3,11 +3,11 @@ import { v4 as uuidv4 } from 'uuid';
 import { Coordinates, Rectangle, calculateRectangularMovement } from "./flight_path"
 
 
-let sense = require("sense-hat-led");
+//let sense = require("sense-hat-led");
 
 let nconf = require("nconf")
 
-sense.setRotation(180);
+// sense.setRotation(180);
 
 let ditto: Ditto
 let collection: Collection
@@ -40,7 +40,7 @@ let dittoMark = [
 
 process.once('SIGINT', async () => {
   try {
-    sense.clear()
+    //  sense.clear()
     await sleep(500)
   } finally {
     console.log('SIGINT received...')
@@ -121,9 +121,9 @@ async function main() {
   await init()
   console.log("Starting logjammer...")
 
-  sense.clear();
-  await sleep(1000);
-  sense.setPixels(dittoMark);
+  // sense.clear();
+  // await sleep(1000);
+  // sense.setPixels(dittoMark);
 
   const config: Record<string, any> = {
     APP_ID: getConfig('ditto:app-id', ''),
@@ -218,7 +218,7 @@ async function main() {
   await sleep(5000)
 
   // Do the thing
-  const doingEverySecond = setInterval(doOnInterval, interval)
+  setInterval(doOnInterval, interval)
 }
 
 main()
