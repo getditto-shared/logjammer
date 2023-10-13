@@ -2,6 +2,7 @@ import { init, Authenticator, Collection, Ditto, Identity, Subscription, Transpo
 import { v4 as uuidv4 } from 'uuid';
 import { Coordinates, Rectangle, calculateRectangularMovement } from "./flight_path"
 
+let Gpsd = require('node-gpsd-client')
 
 //let sense = require("sense-hat-led");
 
@@ -117,10 +118,43 @@ function doOnInterval() {
 const getConfig = (key: string, fallback?: any) => nconf.get(key) || fallback;
 const asBoolean = (value: any) => [true, 'true', 'True', 'TRUE', '1', 1].includes(value);
 
+
+declare global {
+  var gpsData: any;
+}
+
 async function main() {
   await init()
   console.log("Starting logjammer...")
 
+let gpsClient = new Gpsd({
+  port: 2947,
+  hostname: 'localhost',
+  parse: true
+})
+
+gpsClient.on('connected', () => {
+  gpsClient.watch({
+    class: 'WATCH',
+    json: true,
+    scaled: true
+  })
+})
+
+gpsClient.on('error', (err: Error) => {
+  console.log(`Gpsd error: ${err.message}`)
+})
+
+
+gpsClient.on('TPV', (data: any) => {
+  globalThis.gpsData = data
+})
+
+gpsClient.connect();
+
+  while (globalThis.gpsData == undefined) {
+       await sleep(1000);
+  }
   // sense.clear();
   // await sleep(1000);
   // sense.setPixels(dittoMark);

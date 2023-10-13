@@ -1,4 +1,3 @@
-let Gpsd = require('node-gpsd-client')
 let fs = require('fs');
 
 export interface Rectangle {
@@ -18,41 +17,22 @@ export interface Coordinates {
   heading: number;
 }
 
-let gpsClient = new Gpsd({
-  port: 2947,
-  hostname: 'localhost',
-  parse: true
-})
-
-gpsClient.on('connected', () => {
-  gpsClient.watch({
-    class: 'WATCH',
-    json: true,
-    scaled: true
-  })
-})
-
-gpsClient.on('error', (err: Error) => {
-  console.log(`Gpsd error: ${err.message}`)
-})
-
-let gpsData: any;
-
-gpsClient.on('TPV', (data: any) => {
-  gpsData = data
-})
-
 export function calculateRectangularMovement(
   startTime: number,
   currentTime: number,
   speed: number,
   rectangle: Rectangle
 ): Coordinates {
-  if (fs.existsSync('dev/serial0')) {
+  if (fs.existsSync('/dev/serial0')) {
 
+    return {
+           latitude: globalThis.gpsData['lat'],
+           longitude: globalThis.gpsData['lon'],
+           heading: globalThis.gpsData['track']
+    };
 
-    return { latitude: gpsData['lat'], longitude: gpsData['lon'], heading: gpsData['track'] };
   } else {
+
     const topLeft: Coordinates = { latitude: rectangle.topLeftLat, longitude: rectangle.topLeftLon, heading: 0 };
     const topRight: Coordinates = { latitude: rectangle.topRightLat, longitude: rectangle.topRightLon, heading: 0 };
     const bottomLeft: Coordinates = { latitude: rectangle.bottomLeftLat, longitude: rectangle.bottomLeftLon, heading: 0 };
