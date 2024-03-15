@@ -219,8 +219,14 @@ async function main() {
     BPA_URL: getConfig("ditto:bpa-url", ""),
   };
 
+  console.log(config.APP_ID)
   console.log(config.APP_TOKEN)
   console.log(config.OFFLINE_TOKEN)
+  console.log(config.SHARED_KEY)
+  console.log(config.USE_CLOUD)
+  console.log(config.USE_LAN)
+  console.log(config.USE_BLE)
+  console.log(config.BLA_URL)
 
   // We're testing BLE here
   transportConfig = new TransportConfig();
