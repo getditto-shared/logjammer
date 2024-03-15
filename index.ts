@@ -219,6 +219,9 @@ async function main() {
     BPA_URL: getConfig("ditto:bpa-url", ""),
   };
 
+  console.log(config.APP_TOKEN)
+  console.log(config.OFFLINE_TOKEN)
+
   // We're testing BLE here
   transportConfig = new TransportConfig();
   transportConfig.peerToPeer.bluetoothLE.isEnabled = config.USE_BLE;
