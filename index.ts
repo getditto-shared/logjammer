@@ -14,6 +14,8 @@ import {
   calculateRectangularMovement,
 } from "./flight_path";
 
+let os = require("os");
+
 let sense = require("sense-hat-led");
 
 let nconf = require("nconf");
@@ -238,11 +240,11 @@ async function main() {
   //   sharedKey: process.env.SHARED_KEY,
   // }
   const authHandler = {
-    authenticationRequired: async function (authenticator: Authenticator) {
+    authenticationRequired: async function(authenticator: Authenticator) {
       await authenticator.loginWithToken("full_access", "dummy-provider");
       console.log(`Login requested`);
     },
-    authenticationExpiringSoon: function (
+    authenticationExpiringSoon: function(
       authenticator: Authenticator,
       secondsRemaining: number,
     ) {
@@ -270,20 +272,11 @@ async function main() {
 
   ditto = new Ditto(identity, "./ditto");
 
+  ditto.deviceName = os.hostname();
+
   if (config.BPA_URL == "NA") {
     ditto.setOfflineOnlyLicenseToken(config.OFFLINE_TOKEN);
   }
-  const transportConditionsObserver = ditto.observeTransportConditions(
-    (condition, source) => {
-      if (condition === "BLEDisabled") {
-        console.log("BLE disabled");
-      } else if (condition === "NoBLECentralPermission") {
-        console.log("Permission missing for BLE");
-      } else if (condition === "NoBLEPeripheralPermission") {
-        console.log("Permissions missing for BLE");
-      }
-    },
-  );
 
   ditto.setTransportConfig(transportConfig);
 
