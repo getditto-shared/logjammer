@@ -144,13 +144,13 @@ const asBoolean = (value: any) =>
 // BottomRight: 32.3770459, -86.3109061
 const rectangle: Rectangle = {
   topLeftLat: getConfig("rectangle:topLeftLat", 32.3779983),
-  topLeftLon: getConfig("rectangle: topLeftLon", -86.3119614),
-  topRightLat: getConfig("rectangle: topRightLat", 32.3779983),
-  topRightLon: getConfig("rectangle: topRightLon", -86.3109061),
-  bottomLeftLat: getConfig("rectangle: bottomLeftLat", 32.3770459),
-  bottomLeftLon: getConfig("rectangle: bottomLeftLon", -86.3119614),
-  bottomRightLat: getConfig("rectangle: bottomRightLat", 32.3770459),
-  bottomRightLon: getConfig("rectangle: bottomRightLon", -86.3109061),
+  topLeftLon: getConfig("rectangle:topLeftLon", -86.3119614),
+  topRightLat: getConfig("rectangle:topRightLat", 32.3779983),
+  topRightLon: getConfig("rectangle:topRightLon", -86.3109061),
+  bottomLeftLat: getConfig("rectangle:bottomLeftLat", 32.3770459),
+  bottomLeftLon: getConfig("rectangle:bottomLeftLon", -86.3119614),
+  bottomRightLat: getConfig("rectangle:bottomRightLat", 32.3770459),
+  bottomRightLon: getConfig("rectangle:bottomRightLon", -86.3109061),
 };
 
 const speed: number = 0.0005; // Degrees per millisecond
