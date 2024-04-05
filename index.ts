@@ -138,27 +138,29 @@ function sleep(ms: number) {
 // Monty-BESPIN
 // TopLeft: 32.3779983, -86.3119614
 // BottomRight: 32.3770459, -86.3109061
-const rectangle: Rectangle = {
-  topLeftLat: 32.3779983,
-  topLeftLon: -86.3119614,
-  topRightLat: 32.3779983,
-  topRightLon: -86.3109061,
-  bottomLeftLat: 32.3770459,
-  bottomLeftLon: -86.3119614,
-  bottomRightLat: 32.3770459,
-  bottomRightLon: -86.3109061,
-};
-
 // const rectangle: Rectangle = {
-//   topLeftLat: getConfig("rectangle:topLeftLat", 32.3779983),
-//   topLeftLon: getConfig("rectangle:topLeftLon", -86.3119614),
-//   topRightLat: getConfig("rectangle:topRightLat", 32.3779983),
-//   topRightLon: getConfig("rectangle:topRightLon", -86.3109061),
-//   bottomLeftLat: getConfig("rectangle:bottomLeftLat", 32.3770459),
-//   bottomLeftLon: getConfig("rectangle:bottomLeftLon", -86.3119614),
-//   bottomRightLat: getConfig("rectangle:bottomRightLat", 32.3770459),
-//   bottomRightLon: getConfig("rectangle:bottomRightLon", -86.3109061),
+//   topLeftLat: 32.3779983,
+//   topLeftLon: -86.3119614,
+//   topRightLat: 32.3779983,
+//   topRightLon: -86.3109061,
+//   bottomLeftLat: 32.3770459,
+//   bottomLeftLon: -86.3119614,
+//   bottomRightLat: 32.3770459,
+//   bottomRightLon: -86.3109061,
 // };
+
+const getConfig = (key: string, fallback?: any) => nconf.get(key) || fallback;
+
+const rectangle: Rectangle = {
+  topLeftLat: getConfig("rectangle:topLeftLat", 32.3779983),
+  topLeftLon: getConfig("rectangle:topLeftLon", -86.3119614),
+  topRightLat: getConfig("rectangle:topRightLat", 32.3779983),
+  topRightLon: getConfig("rectangle:topRightLon", -86.3109061),
+  bottomLeftLat: getConfig("rectangle:bottomLeftLat", 32.3770459),
+  bottomLeftLon: getConfig("rectangle:bottomLeftLon", -86.3119614),
+  bottomRightLat: getConfig("rectangle:bottomRightLat", 32.3770459),
+  bottomRightLon: getConfig("rectangle:bottomRightLon", -86.3109061),
+};
 
 const speed: number = 0.0005; // Degrees per millisecond
 
@@ -182,7 +184,7 @@ function doOnInterval() {
   let payload = {
     _id: dID,
     type: "a-h-A-M-A",
-    title: "logjammer",
+    title: getConfig("info:name", "logjammer"),
     altitude: 300,
     description: "ausa test marker",
     lon: currentPosition.longitude,
@@ -207,7 +209,7 @@ function doOnInterval() {
   console.log(`Upserting to ditto: [${counter}]`, payload);
 }
 
-const getConfig = (key: string, fallback?: any) => nconf.get(key) || fallback;
+
 const asBoolean = (value: any) =>
   [true, "true", "True", "TRUE", "1", 1].includes(value);
 

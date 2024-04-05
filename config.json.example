@@ -10,6 +10,9 @@
     "use-ble": "true",
     "bpa-url": "http://ditto.bpa.local"
   },
+  "info" : {
+    "name": "logjammer"
+  },
   "rectangle": {
     "topLeftLat": 32.3779983,
     "topLeftLon": -86.3119614,
