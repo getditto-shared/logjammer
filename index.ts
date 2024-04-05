@@ -135,23 +135,30 @@ function sleep(ms: number) {
   });
 }
 
-const getConfig = (key: string, fallback?: any) => nconf.get(key) || fallback;
-const asBoolean = (value: any) =>
-  [true, "true", "True", "TRUE", "1", 1].includes(value);
-
 // Monty-BESPIN
 // TopLeft: 32.3779983, -86.3119614
 // BottomRight: 32.3770459, -86.3109061
 const rectangle: Rectangle = {
-  topLeftLat: getConfig("rectangle:topLeftLat", 32.3779983),
-  topLeftLon: getConfig("rectangle:topLeftLon", -86.3119614),
-  topRightLat: getConfig("rectangle:topRightLat", 32.3779983),
-  topRightLon: getConfig("rectangle:topRightLon", -86.3109061),
-  bottomLeftLat: getConfig("rectangle:bottomLeftLat", 32.3770459),
-  bottomLeftLon: getConfig("rectangle:bottomLeftLon", -86.3119614),
-  bottomRightLat: getConfig("rectangle:bottomRightLat", 32.3770459),
-  bottomRightLon: getConfig("rectangle:bottomRightLon", -86.3109061),
+  topLeftLat: 32.3779983,
+  topLeftLon: -86.3119614,
+  topRightLat: 32.3779983,
+  topRightLon: -86.3109061,
+  bottomLeftLat: 32.3770459,
+  bottomLeftLon: -86.3119614,
+  bottomRightLat: 32.3770459,
+  bottomRightLon: -86.3109061,
 };
+
+// const rectangle: Rectangle = {
+//   topLeftLat: getConfig("rectangle:topLeftLat", 32.3779983),
+//   topLeftLon: getConfig("rectangle:topLeftLon", -86.3119614),
+//   topRightLat: getConfig("rectangle:topRightLat", 32.3779983),
+//   topRightLon: getConfig("rectangle:topRightLon", -86.3109061),
+//   bottomLeftLat: getConfig("rectangle:bottomLeftLat", 32.3770459),
+//   bottomLeftLon: getConfig("rectangle:bottomLeftLon", -86.3119614),
+//   bottomRightLat: getConfig("rectangle:bottomRightLat", 32.3770459),
+//   bottomRightLon: getConfig("rectangle:bottomRightLon", -86.3109061),
+// };
 
 const speed: number = 0.0005; // Degrees per millisecond
 
@@ -166,7 +173,7 @@ function doOnInterval() {
     startTime,
     currentTime,
     speed,
-    rectangle
+    rectangle,
   );
 
   let siteID = `${ditto.siteID}`;
@@ -200,6 +207,10 @@ function doOnInterval() {
   console.log(`Upserting to ditto: [${counter}]`, payload);
 }
 
+const getConfig = (key: string, fallback?: any) => nconf.get(key) || fallback;
+const asBoolean = (value: any) =>
+  [true, "true", "True", "TRUE", "1", 1].includes(value);
+
 async function main() {
   await init();
   console.log("Starting logjammer...");
@@ -219,14 +230,14 @@ async function main() {
     BPA_URL: getConfig("ditto:bpa-url", ""),
   };
 
-  console.log(config.APP_ID);
-  console.log(config.APP_TOKEN);
-  console.log(config.OFFLINE_TOKEN);
-  console.log(config.SHARED_KEY);
-  console.log(config.USE_CLOUD);
-  console.log(config.USE_LAN);
-  console.log(config.USE_BLE);
-  console.log(config.BLA_URL);
+  console.log(config.APP_ID)
+  console.log(config.APP_TOKEN)
+  console.log(config.OFFLINE_TOKEN)
+  console.log(config.SHARED_KEY)
+  console.log(config.USE_CLOUD)
+  console.log(config.USE_LAN)
+  console.log(config.USE_BLE)
+  console.log(config.BLA_URL)
 
   // We're testing BLE here
   transportConfig = new TransportConfig();
@@ -253,7 +264,7 @@ async function main() {
     },
     authenticationExpiringSoon: function (
       authenticator: Authenticator,
-      secondsRemaining: number
+      secondsRemaining: number,
     ) {
       console.log(`Auth token expiring in ${secondsRemaining} seconds`);
     },
@@ -291,7 +302,7 @@ async function main() {
       } else if (condition === "NoBLEPeripheralPermission") {
         console.log("Permissions missing for BLE");
       }
-    }
+    },
   );
 
   ditto.setTransportConfig(transportConfig);
@@ -305,7 +316,7 @@ async function main() {
         console.log(
           "peer connection: ",
           peer.deviceName,
-          peer.connections[0].connectionType
+          peer.connections[0].connectionType,
         );
       });
     }
