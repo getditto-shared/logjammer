@@ -13,7 +13,7 @@ import {
   Rectangle,
   calculateRectangularMovement,
 } from "./flight_path";
-
+import os from "os";
 // let sense = require("sense-hat-led");
 
 let nconf = require("nconf");
@@ -291,6 +291,7 @@ async function main() {
   }
 
   ditto = new Ditto(identity, "./ditto");
+  ditto.deviceName = `${getConfig("info:name", os.hostname())} - Autonomy`
 
   if (config.BPA_URL == "NA") {
     ditto.setOfflineOnlyLicenseToken(config.OFFLINE_TOKEN);
