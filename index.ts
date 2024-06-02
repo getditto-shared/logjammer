@@ -274,23 +274,24 @@ async function main() {
 
   console.log(`BPA_URL: ${config.BPA_URL}`);
 
-  if (config.BPA_URL == "NA") {
-    identity = {
-      type: "sharedKey",
-      appID: config.APP_ID,
-      sharedKey: config.SHARED_KEY,
-    };
-  } else {
-    identity = {
-      type: "onlineWithAuthentication",
-      appID: config.APP_ID,
-      enableDittoCloudSync: false,
-      authHandler: authHandler,
-      customAuthURL: config.BPA_URL,
-    };
-  }
+  // if (config.BPA_URL == "NA") {
+  //   identity = {
+  //     type: "sharedKey",
+  //     appID: config.APP_ID,
+  //     sharedKey: config.SHARED_KEY,
+  //   };
+  // } else {
+  //   identity = {
+  //     type: "onlineWithAuthentication",
+  //     appID: config.APP_ID,
+  //     enableDittoCloudSync: false,
+  //     authHandler: authHandler,
+  //     customAuthURL: config.BPA_URL,
+  //   };
+  // }
 
-  ditto = new Ditto(identity, "./ditto");
+  // ditto = new Ditto(identity, "./ditto");
+  ditto = new Ditto({ type: 'onlinePlayground', appID: config.APP_ID, token: config.APP_TOKEN})
   ditto.deviceName = `${getConfig("info:name", os.hostname())} - Autonomy`
 
   if (config.BPA_URL == "NA") {
