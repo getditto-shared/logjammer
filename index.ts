@@ -294,9 +294,9 @@ async function main() {
   ditto = new Ditto({ type: 'onlinePlayground', appID: config.APP_ID, token: config.APP_TOKEN})
   ditto.deviceName = `${getConfig("info:name", os.hostname())} - Autonomy`
 
-  if (config.BPA_URL == "NA") {
-    ditto.setOfflineOnlyLicenseToken(config.OFFLINE_TOKEN);
-  }
+  // if (config.BPA_URL == "NA") {
+  //   ditto.setOfflineOnlyLicenseToken(config.OFFLINE_TOKEN);
+  // }
   const transportConditionsObserver = ditto.observeTransportConditions(
     (condition, source) => {
       if (condition === "BLEDisabled") {
